@@ -1,4 +1,4 @@
-# hole_vision
+# hole-vision
 
 Measures the diameter of a hole in a microscope image.
 

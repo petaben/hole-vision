@@ -17,16 +17,31 @@ Run `source .venv/bin/activate` again in each new terminal before using the comm
 ## Web app
 
 ```bash
-streamlit run vision/app.py
+streamlit run vision/app.py --server.address localhost
 ```
 
 opens a page in your browser (http://localhost:8501). Pick the magnification, drop in one or
 more microscope images, and each one gets its diameter and the image with the measured circle,
 which you can download. With several images, a table lists all diameters.
 
-The page is only reachable from your computer. To let others on your network use it, start it
-with `--server.address 0.0.0.0` and have them open `http://<your-computer's-IP>:8501`. There
-is no login, so anyone on the network can then use it.
+`--server.address localhost` keeps the page reachable only from your computer. Without it,
+anyone on your network can open it at `http://<your-computer's-IP>:8501`; there is no login.
+
+### Online
+
+The app can run for free on [Streamlit Community Cloud](https://share.streamlit.io), straight
+from this GitHub repository:
+
+1. Push your changes to GitHub.
+2. Sign in at https://share.streamlit.io with GitHub, click **Create app** and choose to deploy
+   from a GitHub repository.
+3. Pick this repository, branch `main` and main file path `vision/app.py`. Under
+   **Advanced settings**, pick the newest Python version offered. Then click **Deploy**.
+4. In the app's **Share** settings, choose who can open it: anyone with the link, or only people
+   you invite by email.
+
+Every push to `main` updates the online app. Images uploaded there are processed on Streamlit's
+servers in the US.
 
 ## Command line
 

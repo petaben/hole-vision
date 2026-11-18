@@ -123,7 +123,7 @@ def draw_debug(image: np.ndarray, hole: Hole) -> np.ndarray:
     out = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR) if image.ndim == 2 else image.copy()
     h, w = out.shape[:2]
     color = (0, 255, 0)
-    thickness = max(1, round(max(h, w) / 1000))
+    thickness = max(1, round(max(h, w) / 3000))  # thin, so the rim stays visible
 
     shift = 4  # draw with sub-pixel precision
     center = (round(hole.center_x * 2**shift), round(hole.center_y * 2**shift))

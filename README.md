@@ -4,11 +4,31 @@ Measures the diameter of a hole in a microscope image.
 
 ## Setup
 
+The dependencies go into a virtual environment in `.venv`, separate from your global Python:
+
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Usage
+Run `source .venv/bin/activate` again in each new terminal before using the commands below.
+
+## Web app
+
+```bash
+streamlit run vision/app.py
+```
+
+opens a page in your browser (http://localhost:8501). Pick the magnification, drop in one or
+more microscope images, and each one gets its diameter and the image with the measured circle,
+which you can download. With several images, a table lists all diameters.
+
+The page is only reachable from your computer. To let others on your network use it, start it
+with `--server.address 0.0.0.0` and have them open `http://<your-computer's-IP>:8501`. There
+is no login, so anyone on the network can then use it.
+
+## Command line
 
 ```bash
 python vision/measure_hole.py test_data/1-197.tif 1016.3473

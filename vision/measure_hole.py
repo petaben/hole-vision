@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -63,16 +64,31 @@ class HoleNotFoundError(RuntimeError):
 
 
 def load_image(path: str | Path) -> np.ndarray:
+    with _quiet_opencv():
+        image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+    if image is None:
+        raise FileNotFoundError(f"cannot read image: {path}")
+    return image
+
+
+def decode_image(data: bytes) -> np.ndarray:
+    """Decode the contents of an image file (TIFF, PNG, JPEG, ...)."""
+    with _quiet_opencv():
+        image = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+    if image is None:
+        raise ValueError("not a readable image")
+    return image
+
+
+@contextmanager
+def _quiet_opencv():
     # Microscope TIFFs carry vendor tags that make libtiff warn on every read.
     log_level = cv2.utils.logging.getLogLevel()
     cv2.utils.logging.setLogLevel(cv2.utils.logging.LOG_LEVEL_ERROR)
     try:
-        image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+        yield
     finally:
         cv2.utils.logging.setLogLevel(log_level)
-    if image is None:
-        raise FileNotFoundError(f"cannot read image: {path}")
-    return image
 
 
 def measure_hole(image: np.ndarray, px_per_mm: float) -> Hole:
